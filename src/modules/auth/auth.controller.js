@@ -32,8 +32,8 @@ const Login = catchError(async(req,res)=>{
 
   if(!user || !bcrypt.compareSync(password,user.password)) return res.status(404).json({message:'user credential error ! '})
 
-    const {_id:id ,Role ,name} = user
-    const token = jwt.sign({ name, Role, id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const {_id:id ,role ,name} = user
+    const token = jwt.sign({ name, role, id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
     return res.json({message: 'success login' , user , token})
 })

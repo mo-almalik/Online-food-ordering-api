@@ -11,7 +11,7 @@ export const authenticate = (req,res,next)=>{
     
     try{
         const decoded = jwt.verify(bearerToken ,process.env.JWT_SECRET , {expiresIn:process.env.JWT_EXPIRES_IN})
-        req.user= decoded
+        req.user = decoded
         next()
     }catch(err){
      throw new AppError(err.message , 498)
@@ -20,9 +20,11 @@ export const authenticate = (req,res,next)=>{
 
 // authorize
 
-export const  authorize = (Role)=>{
-    return (req,res,next)=>{
-        if(Role !== req.user.Role) throw new AppError('Forbidden' , 403)
-            next()
-    }
-}
+export const authorize = (...allowedRoles) => {
+    return (req, res, next) => {
+      if (!allowedRoles.includes(req.user.role)) { 
+        return next(new AppError('Forbidden', 403));
+      }
+      next();
+    };
+  };
